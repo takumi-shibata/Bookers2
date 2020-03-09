@@ -13,9 +13,9 @@
 					<thead>
 						<tr>
 						  <th class="col-md-3"></th>
-						  <th class="col-md-5">Title</th>
+						  <th class="col-md-3">Title</th>
 						  <th class="col-md-3">Opinion</th>
-						  <th class="col-md-1"></th>
+						  <th class="col-md-3"></th>
 					  </tr>
 					</thead>
 					<% @books.each do |books| %>
@@ -25,6 +25,7 @@
 							  </td>
 							  <td> <%= link_to books.title,book_path(books.id), class: "book_#{books.id}" %> </td>
 							  <td> <%= books.body %> </td>
+							  <td> <%= "コメント数：#{books.book_comments.count}" %> </td>
 						  </tr>
 					</tbody>
 					<% end%>

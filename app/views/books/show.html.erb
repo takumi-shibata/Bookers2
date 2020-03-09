@@ -30,10 +30,21 @@
 							<td class="col-md-3"><%= @book_id.title %></td>
 							<td class="col-md-4"><%= @book_id.body %></td>
 							<td class="col-md-1">
-								<%= link_to "Edit",edit_book_path,class: "btn btn-success btn-sm edit_book_#{@book_id.id}" %>
+								<% if @book.favorited_by?(current_user) %>
+									<%=link_to @book.favorites.count, book_favorites_path(@book_id.id), method: :delete %><span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+									           
+								<% else %>
+									<%=link_to @book.favorites.count, book_favorites_path(@book_id.id), method: :post %><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>
+									           
+								<% end %>
+							<td class="col-md-1">
+								<%= "コメント数：#{@book_id.book_comments.count}" %>
 							</td>
 							<td class="col-md-1">
-								<%= link_to "Destroy",book_path,method: :delete,data: {confirm: "本当に消しますか？"},class: "btn btn-danger btn-sm destroy_book_#{@book_id.id}" %>
+								<%= link_to "Edit",edit_book_path(@book_id),class: "btn btn-success btn-sm" %>
+							</td>
+							<td class="col-md-1">
+								<%= link_to "Destroy",book_path(@book_id) ,method: :delete,data: {confirm: "本当に消しますか？"},class: "btn btn-danger btn-sm" %>
 							</td>
 						</tr>
 						<% else %>
@@ -45,10 +56,29 @@
 						<% end %>
 					</tbody>
 				</table>
+
+				<% @book_id.book_comments.each do |book_comment| %>
+				   <div class="comment-text">
+	                    <div class="comment-author clearfix">
+	                    	<span class="comment-meta">
+	                          <span class="comment-date"><%= book_comment.created_at.strftime('%Y/%m/%d') %></span>
+	                        </span>
+	                    </div>
+	                    <div class="comment-entry"><%= book_comment.comment %></div>
+	                    <%= link_to 'Destroy', book_book_comment_path(@book_id, book_comment),method: :delete,data: {confirm:'削除してもよろしいですか？'}%>
+	                </div>
+				<% end %>
+
+				<%= form_for [@book_id, @book_comment] do |f| %>
+					    <div class="row">
+					        <div class="col-md-12">
+					            <%= f.text_area :comment, rows:'4', class: "form-control",placeholder: "コメントをここに" %>
+					        </div>
+					    </div>
+					    <%= f.submit "送信", class: "btn btn-md btn-base-1 mt-20 btn-default pull-right" %>
+				<% end %>
 			</div>
 		</div>
-
-
 	</div>
 </div>
 
