@@ -14,6 +14,16 @@
 			</div>
 		<% end %>
 
+		<% if @book_comment.errors.any? %>
+		  <div id="error_explanation" class="alert alert-danger">
+		    <ul>
+		      <% @book_comment.errors.full_messages.each do |message| %>
+		        <li><%= message %></li>
+		      <% end %>
+		    </ul>
+		  </div>
+		<% end %>
+
 		
 		<%= render'books/list',book:@book ,user:@user %>
 
@@ -30,12 +40,10 @@
 							<td class="col-md-3"><%= @book_id.title %></td>
 							<td class="col-md-4"><%= @book_id.body %></td>
 							<td class="col-md-1">
-								<% if @book.favorited_by?(current_user) %>
-									<%=link_to @book.favorites.count, book_favorites_path(@book_id.id), method: :delete %><span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
-									           
+								<% if @book_id.favorited_by?(current_user) %>
+									<%=link_to @book_id.favorites.count, book_favorites_path(@book_id.id), method: :delete %><span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
 								<% else %>
-									<%=link_to @book.favorites.count, book_favorites_path(@book_id.id), method: :post %><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>
-									           
+									<%=link_to @book_id.favorites.count, book_favorites_path(@book_id.id), method: :post %><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>
 								<% end %>
 							<td class="col-md-1">
 								<%= "コメント数：#{@book_id.book_comments.count}" %>
